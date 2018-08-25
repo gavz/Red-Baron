@@ -13,7 +13,6 @@ This repository comes with a few pre-compiled [Terraform](https://www.terraform.
 
 - Linode Provider: https://github.com/LinodeContent/terraform-provider-linode
 - GoDaddy Provider: https://github.com/n3integration/terraform-godaddy
-- ACME Provider: https://github.com/paybyphone/terraform-provider-acme
 
 # Author and Acknowledgments
 
@@ -37,8 +36,13 @@ Both of these resources were referenced heavily while building this.
 #~ export AWS_SECRET_ACCESS_KEY="secretkey"
 #~ export AWS_DEFAULT_REGION="us-east-1"
 #~ export LINODE_API_KEY="apikey"
+#~ export DIGITALOCEAN_TOKEN="token"
 #~ export GODADDY_API_KEY="gdkey"
 #~ export GODADDY_API_SECRET="gdsecret"
+#~ export ARM_SUBSCRIPTION_ID="azure_subscription_id"
+#~ export ARM_CLIENT_ID="azure_app_id"
+#~ export ARM_CLIENT_SECRET="azure_app_password"
+#~ export ARM_TENANT_ID="azure_tenant_id"
 
 # copy an infrastructure configuration file from the examples folder to the root directory and modify it to your needs
 #~ cp examples/complete_c2.tf .
@@ -46,6 +50,15 @@ Both of these resources were referenced heavily while building this.
 #~ terraform init
 #~ terraform plan
 #~ terraform apply
+```
+## Google Cloud Compute
+Google Cloud Compute requires creating a project under the Google Cloud console. 
+- [Create a project](https://cloud.google.com/dataproc/docs/guides/setup-project), generate a service key, and download the json file to the google_keys dir. 
+- Modify the variable.tf and main.tf files to reference your service account key json file and your project-id. 
+- Set up firewall rules in the Google Cloud Console: Settings -> VPC network -> Firewall rules. Create a new rule:
+
+```
+network=default, priority=1, direction=ingress, action on match=allow, ip-range=0.0.0.0/24, protocols:ports=tcp:22,tcp:80,tcp:443
 ```
 
 # Tool & Module Documentation
@@ -65,3 +78,13 @@ Most of the documentation assumes you are familiar with [Terraform](https://www.
 - LetsEncrypt cert creation using the TLS challenge currently doesn't work due to the third-party terraform ACME plugin implementation (https://github.com/paybyphone/terraform-provider-acme#using-http-and-tls-challenges). (I probably could get it to work with some extra tinkering)
 
 - The GoDaddy modules replace **all** of the DNS entries instead of adding the specified record to the existing zone file due to the implementation of the third-party provider (https://github.com/n3integration/terraform-godaddy). (Not ideal and definitely need to work on this, but it will due for now)
+
+# License
+
+This project is released as 100% open-source to help the security community. 
+Feel free to take the code, use it how you wish, just keep in mind that if it's my code, 
+attribute me BUT MORE IMPORTANTLY if I used someone else's code or ideas, 
+make sure to credit them and respect their licenses. 
+
+Our goal for this code is to help the security community and vulnerability research in general, 
+so don't use it commercially. Let information be free!

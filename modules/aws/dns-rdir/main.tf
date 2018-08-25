@@ -2,8 +2,11 @@ terraform {
   required_version = ">= 0.10.0"
 }
 
-data "aws_region" "current" {
-  current = true
+data "aws_region" "current" {}
+
+resource "random_id" "server" {
+  count = "${var.count}"
+  byte_length = 4
 }
 
 resource "tls_private_key" "ssh" {
@@ -28,7 +31,7 @@ resource "aws_instance" "dns-rdir" {
   count = "${var.count}"
 
   tags = {
-    Name = "dns-rdir-${count.index + 1}"
+    Name = "dns-rdir-${random_id.server.*.hex[count.index]}"
   }
 
   ami = "${var.amis[data.aws_region.current.name]}"
